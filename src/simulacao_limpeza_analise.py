@@ -14,14 +14,7 @@ np.random.seed(42)
 # Define a data inicial do período (1º de janeiro de 2023)
 inicio = datetime(2023, 1, 1)
 
-# Define a data final do período (31 de dezembro de 2023)
-fim = datetime(2023, 12, 31)
-
 # Gera 60 datas aleatórias dentro de 2023
-# np.random.randint(0, 365) gera um número aleatório de dias
-# timedelta transforma esse número em dias
-# inicio + timedelta soma esses dias à data inicial
-# for _ in range(60) repete o processo 60 vezes
 datas = [inicio + timedelta(days=np.random.randint(0, 365)) for _ in range(60)]
 
 # Mapeamento de produtos para categorias fixas
@@ -33,18 +26,35 @@ mapa_produtos = {
     "Headset": "Acessórios"
 }
 
-# Sorteia apenas os produtos (usando as chaves do dicionário)
+# Sorteia produtos
 produtos_sorteados = np.random.choice(list(mapa_produtos.keys()), 60)
 
-# Cria o DataFrame com 60 registros simulados
+# Cria DataFrame (SEM preço ainda)
 dados = pd.DataFrame({
-    "ID": range(1, 61),  # Cria IDs de 1 até 60
-    "Data": datas,  # Usa as datas aleatórias criadas anteriormente
-    "Produto": produtos_sorteados,  # Usa os produtos sorteados
-    "Categoria": [mapa_produtos[prod] for prod in produtos_sorteados],  # Puxa a categoria correta para cada produto
-    "Quantidade": np.random.randint(1, 10, 60),  # Gera quantidade vendida entre 1 e 9
-    "Preco": np.random.uniform(50, 5000, 60).round(2)  # Gera preços entre 50 e 5000
+    "ID": range(1, 61),
+    "Data": datas,
+    "Produto": produtos_sorteados,
+    "Categoria": [mapa_produtos[prod] for prod in produtos_sorteados],
+    "Quantidade": np.random.randint(1, 10, 60)
 })
+
+# Faixas de preço por produto
+faixas_preco = {
+    "Notebook": (1800, 5000),
+    "Monitor": (800, 3500),
+    "Mouse": (50, 400),
+    "Teclado": (120, 600),
+    "Headset": (150, 800)
+}
+
+# Função para gerar preço conforme o produto
+def gerar_preco(produto):
+    minimo, maximo = faixas_preco[produto]
+    return np.random.uniform(minimo, maximo)
+
+# Criar coluna de preço
+dados["Preco"] = dados["Produto"].apply(gerar_preco).round(2)
+
 dados.head()
 
 # Inserindo um valor faltante propositalmente na coluna Preco
@@ -68,8 +78,8 @@ dados.info()
 # O filtro retorna apenas os registros problemáticos
 dados[dados['Preco'].isnull()]
 
-# Preenche valores nulos usando média por produto (automático e seguro)
-dados['Preco'] = dados.groupby('Produto')['Preco'].transform(lambda x: x.fillna(x.mean()))
+# Preenche valores nulos usando a média por produto, arredondada para 2 casas decimais
+dados['Preco'] = dados.groupby('Produto')['Preco'].transform(lambda x: x.fillna(x.mean().round(2)))
 
 # Verifica novamente
 print(dados.isnull().sum())
