@@ -65,6 +65,10 @@ dados = pd.concat([dados, dados.iloc[[0]]], ignore_index=True)
 
 dados.info()
 
+# Salva o dataset bruto (antes da limpeza)
+dados.to_csv("data_raw.csv", index=False, encoding='utf-8-sig')
+from google.colab import files
+files.download("data_raw.csv")
 
 #Limpeza de Dados
 # Remove registros duplicados
@@ -92,13 +96,13 @@ print(dados.dtypes)
 # Visualiza as primeiras linhas finais
 dados.head()
 
+# Cria coluna de faturamento total por linha
+dados['Total_Venda'] = dados['Quantidade'] * dados['Preco']
+
 # Salva o dataset limpo com codificação que aceita acentos (UTF-8 com BOM)
 dados.to_csv("data_clean.csv", index=False, encoding='utf-8-sig')
 from google.colab import files
 files.download("data_clean.csv")
-
-# Cria coluna de faturamento total por linha
-dados['Total_Venda'] = dados['Quantidade'] * dados['Preco']
 
 # Calcula o total de vendas por produto
 vendas_por_produto = dados.groupby('Produto')['Total_Venda'].sum().reset_index()
