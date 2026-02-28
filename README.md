@@ -1,14 +1,14 @@
 # Teste Analytics Kailany Aline
 
-# Parte 1 — Limpeza e Análise de Dados de Vendas
+## Parte 1 — Limpeza e Análise de Dados de Vendas
 
-## Objetivo
+### Objetivo
 
 Simular um dataset de vendas contendo pelo menos 50 registros no período de 01/01/2023 a 31/12/2023, realizar a limpeza dos dados e executar análises básicas de faturamento.
 
 ---
 
-## Estrutura dos Dados
+### Estrutura dos Dados
 
 O dataset contém as seguintes colunas:
 
@@ -22,9 +22,7 @@ O dataset contém as seguintes colunas:
 
 Foram gerados **60 registros simulados**.
 
----
-
-## Simulação dos Dados
+### Simulação dos Dados
 
 * A geração dos dados foi feita utilizando `numpy` e `pandas`.
 * Foi definida uma **seed aleatória (`np.random.seed(42)`)** para garantir reprodutibilidade.
@@ -37,9 +35,7 @@ Foram gerados **60 registros simulados**.
   * Headset: 150 a 800
 * As categorias foram atribuídas de forma consistente via mapeamento fixo produto → categoria.
 
----
-
-## Limpeza dos Dados
+### Limpeza dos Dados
 
 Durante a simulação, foram inseridos propositalmente:
 
@@ -58,8 +54,6 @@ Após a limpeza, o dataset final foi salvo como:
 ```
 data_clean.csv
 ```
-
----
 
 # Geração e Download dos Arquivos CSV
 
@@ -83,9 +77,7 @@ Esse comando permite realizar o download automático do arquivo gerado para a m�
 
 Caso o script seja executado fora do Colab (ex: VS Code ou terminal), essa parte pode ser removida sem impactar o funcionamento principal.
 
----
-
-## Análise Realizada
+### Análise Realizada
 
 1. Criação da coluna **Total_Venda** (Quantidade × Preco)
 2. Cálculo do faturamento total por produto
@@ -93,17 +85,13 @@ Caso o script seja executado fora do Colab (ex: VS Code ou terminal), essa parte
 
 A agregação foi realizada utilizando `groupby()` e `sum()`.
 
----
-
-## Suposições Adotadas
+### Suposições Adotadas
 
 * Os dados foram simulados para fins analíticos e não representam vendas reais.
 * As faixas de preço foram definidas para manter coerência entre produtos.
 * A imputação por média do produto foi escolhida por preservar o comportamento estatístico específico de cada item.
 
----
-
-## Como Executar
+### Como Executar
 
 1. Instale as dependências:
 
@@ -116,5 +104,55 @@ pip install pandas numpy
 ```
 python simulacao_limpeza_analise.py
 ```
+
+---
+
+## Parte 2 — Análise Exploratória de Dados (EDA)
+
+### Objetivo
+
+Realizar análise exploratória utilizando o dataset limpo (`data_clean.csv`), com foco em identificar padrões temporais, concentração de receita e comportamento de preços.
+
+### Visualizações Desenvolvidas
+
+Foram construídos os seguintes gráficos:
+
+1. **Tendência de Vendas Mensais (Gráfico de Linha)**
+
+   * Análise da evolução do faturamento ao longo de 2023.
+   * Identificação de padrões de crescimento, quedas e possíveis sazonalidades.
+
+2. **Distribuição de Preço por Produto (Boxplot)**
+
+   * Avaliação da dispersão e variabilidade dos preços.
+   * Comparação entre produtos de alto e baixo valor agregado.
+
+3. **Quantidade Total Vendida por Produto (Gráfico de Barras)**
+
+   * Análise de volume comercializado.
+   * Identificação de produtos com maior demanda.
+
+4. **Ticket Médio por Produto (Gráfico de Barras)**
+
+   * Cálculo do valor médio por unidade vendida.
+   * Comparação entre produtos de alto e baixo valor unitário.
+
+5. **Faturamento Total por Produto (Gráfico de Barras)**
+
+   * Avaliação da concentração de receita.
+   * Identificação do principal produto gerador de receita.
+
+### Principais Achados
+
+* Observou-se volatilidade nas vendas mensais, com pico significativo em setembro.
+* O produto **Notebook** apresenta maior ticket médio, maior volume e maior faturamento total, indicando forte concentração de receita.
+* Produtos de menor valor unitário possuem menor dispersão de preço e menor impacto na receita.
+* A estrutura de receita demonstra dependência relevante de produtos de maior valor agregado.
+
+### Tecnologias Utilizadas
+
+* `pandas`
+* `matplotlib`
+* `seaborn`
 
 ---
