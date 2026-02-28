@@ -1,0 +1,34 @@
+---
+title: "Relatório Final — Análise de Vendas 2023"
+author: "Kailany Aline"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    toc: false
+    number_sections: false
+    latex_engine: xelatex
+fontsize: 12pt
+geometry: margin=2.5cm
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Relatório Final — Análise de Vendas 2023
+
+A análise exploratória do dataset de vendas de 2023 evidenciou padrões relevantes no comportamento de faturamento, volume e estrutura de receita do portfólio de produtos.
+
+Observou-se volatilidade nas vendas mensais, com crescimento gradual ao longo do primeiro semestre e um pico expressivo em setembro. Esse comportamento sugere possível influência de fatores sazonais ou eventos específicos que impactaram positivamente o desempenho nesse período. A variação acentuada entre meses indica oportunidade para estratégias que reduzam a oscilação e promovam maior estabilidade ao longo do ano.
+
+A análise por produto revelou forte concentração de receita no Notebook, que apresentou simultaneamente maior ticket médio, maior volume de vendas e maior faturamento total. Esse padrão indica dependência relevante de um único item para sustentação da receita. Produtos de menor valor unitário, como Mouse e Teclado, demonstraram menor impacto financeiro e menor variabilidade de preços, sugerindo menor flexibilidade estratégica de precificação.
+
+O boxplot evidenciou maior dispersão de preços para produtos de maior valor agregado, indicando possível existência de diferentes faixas ou configurações dentro da mesma categoria.
+
+Com base nesses achados, recomenda-se:
+
+1. Desenvolver estratégias comerciais para reduzir a concentração de receita em um único produto.
+2. Explorar oportunidades de aumento de volume nos produtos de menor ticket.
+3. Investigar os fatores que impulsionaram o pico de setembro para replicação estratégica.
+
+Em síntese, os resultados indicam um portfólio dependente de produtos de alto valor agregado, com potencial de otimização por meio de diversificação e gestão mais equilibrada da demanda.
