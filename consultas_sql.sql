@@ -1,25 +1,29 @@
-
 -- ============================================================
 -- ARQUIVO: consultas_sql.sql
--- DESCRIÇÃO: Consultas de análise de faturamento e volume de vendas
+-- DESCRIÇÃO: Consultas SQL + explicação da lógica (Parte 2)
+-- TABELA: vendas
+--
+-- Observação:
+-- O dataset simulado cobre o período 01/01/2023 a 31/12/2023.
+-- Portanto, a consulta solicitada para "junho de 2024" foi
+-- adaptada para "junho de 2023", mantendo a mesma lógica.
 -- ============================================================
 
--- EXPLICAÇÃO DA LÓGICA:
--- O processo seguiu a estrutura fundamental da linguagem SQL:
--- 1. Filtragem (WHERE): Para a análise mensal, isolamos os dados
---    através do operador LIKE, que permite selecionar um padrão
---    específico de data (Ano-Mês).
--- 2. Agrupamento (GROUP BY): Para consolidar dados de diversas
---    vendas em uma única linha por produto, agrupamos as
---    informações pela coluna 'Produto'.
--- 3. Agregação (SUM): Realizamos o cálculo matemático de faturamento
---    (Quantidade * Preço) e de volume (Quantidade) dentro de cada grupo.
--- 4. Ordenação (ORDER BY): Organizamos os resultados para facilitar
---    a leitura (DESC para os maiores valores e ASC para os menores).
 
 -- ------------------------------------------------------------
--- CONSULTA 1: Nome do produto, categoria e soma total de vendas
--- Objetivo: Ranking de faturamento em ordem decrescente.
+-- CONSULTA 1
+-- Objetivo: Listar produto, categoria e o faturamento total
+--           (Quantidade * Preco) por produto, em ordem decrescente.
+--
+-- Lógica:
+-- 1) GROUP BY Produto, Categoria:
+--    Agrupa as vendas por produto (e sua categoria) para consolidar
+--    várias linhas em uma linha por item.
+-- 2) SUM(Quantidade * Preco):
+--    Calcula o faturamento por linha (Qtd * Preço) e soma dentro
+--    de cada grupo, resultando no faturamento total por produto.
+-- 3) ORDER BY Total_Vendas DESC:
+--    Ordena do maior para o menor faturamento para obter o ranking.
 -- ------------------------------------------------------------
 SELECT
     Produto,
@@ -29,14 +33,29 @@ FROM vendas
 GROUP BY Produto, Categoria
 ORDER BY Total_Vendas DESC;
 
+
 -- ------------------------------------------------------------
--- CONSULTA 2: Produtos que venderam menos no mês de junho/2023
--- Objetivo: Identificar itens com menor performance de saída.
+-- CONSULTA 2
+-- Objetivo: Identificar quais produtos venderam menos em junho/2023
+--           (considerando "vender menos" como menor QUANTIDADE).
+--
+-- Lógica:
+-- 1) WHERE (filtro de mês):
+--    Seleciona apenas registros do mês de junho de 2023.
+--    A função strftime('%Y-%m', Data) é compatível com SQLite,
+--    retornando "YYYY-MM" e permitindo filtrar exatamente "2023-06".
+-- 2) GROUP BY Produto:
+--    Consolida as vendas do mês por produto.
+-- 3) SUM(Quantidade):
+--    Soma o volume total vendido por produto em junho.
+-- 4) ORDER BY Total_Quantidade ASC:
+--    Ordena do menor para o maior para destacar os produtos com
+--    menor volume de vendas no mês.
 -- ------------------------------------------------------------
 SELECT
     Produto,
     SUM(Quantidade) AS Total_Quantidade
 FROM vendas
-WHERE Data LIKE '2023-06%'
+WHERE strftime('%Y-%m', Data) = '2023-06'
 GROUP BY Produto
 ORDER BY Total_Quantidade ASC;
