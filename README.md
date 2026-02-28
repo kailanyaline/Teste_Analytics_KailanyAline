@@ -156,3 +156,60 @@ Foram construídos os seguintes gráficos:
 * `seaborn`
 
 ---
+
+## Parte 3 — Consultas SQL
+
+### Objetivo
+
+Aplicar consultas SQL sobre o dataset de vendas com o objetivo de:
+
+1. Calcular o faturamento total por produto e categoria.
+2. Identificar os produtos com menor volume de vendas em um mês específico.
+
+### Observação Importante
+
+O enunciado menciona “junho de 2024”, porém o dataset simulado cobre exclusivamente o período de **01/01/2023 a 31/12/2023**.
+
+Dessa forma, a consulta foi adaptada para **junho de 2023**, mantendo exatamente a mesma lógica de filtragem mensal solicitada.
+
+### Arquivo Entregue
+
+O arquivo `consultas_sql.sql` contém:
+
+* As consultas solicitadas
+* A explicação detalhada da lógica utilizada
+* Comentários documentando cada etapa da construção das queries
+
+### Consulta 1 — Ranking de Faturamento
+
+A primeira consulta agrupa os dados por `Produto` e `Categoria`, calcula o faturamento total utilizando `SUM(Quantidade * Preco)` e ordena os resultados de forma decrescente para identificar os produtos com maior geração de receita.
+
+Conceitos aplicados:
+
+* `GROUP BY`
+* Função agregadora `SUM`
+* Cálculo de faturamento dentro da consulta
+* `ORDER BY DESC` para construção de ranking
+
+### Consulta 2 — Produtos com Menor Volume em Junho
+
+A segunda consulta filtra os registros do mês de junho de 2023 utilizando a função `strftime('%Y-%m', Data)` (compatível com SQLite), agrupa por produto e soma a quantidade vendida. Os resultados são ordenados de forma crescente para destacar os itens com menor volume no período.
+
+Conceitos aplicados:
+
+* `WHERE` com filtro por mês
+* `GROUP BY`
+* `SUM`
+* `ORDER BY ASC`
+
+### Validação das Consultas
+
+As consultas foram validadas utilizando **SQLite via Python**, por meio do arquivo:
+
+```
+src/execucao_SQL.py
+```
+
+Esse script cria a tabela `vendas` a partir do arquivo `data_clean.csv` e executa as queries para conferência dos resultados.
+
+---
