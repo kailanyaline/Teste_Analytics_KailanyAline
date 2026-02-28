@@ -1,131 +1,39 @@
-# 1. Carrega a extensão SQL
-%load_ext sql
-
-# 2. Cria um banco de dados vazio na memória do Colab
-%sql sqlite:///meu_banco.db
-
-# 3. Usa o Python para ler o CSV e salvar dentro desse banco
 import pandas as pd
 import sqlite3
 
-df = pd.read_csv('data_clean.csv')
-conn = sqlite3.connect('meu_banco.db')
-df.to_sql('vendas', conn, if_exists='replace', index=False)
+# 1) Carrega o CSV limpo
+df = pd.read_csv("data_clean.csv")
+
+# 2) Cria banco SQLite local (arquivo) e salva tabela vendas
+conn = sqlite3.connect("meu_banco.db")
+df.to_sql("vendas", conn, if_exists="replace", index=False)
+
+# 3) Consulta 1: faturamento por produto/categoria
+query1 = """
+SELECT
+    Produto,
+    Categoria,
+    SUM(Quantidade * Preco) AS Total_Vendas
+FROM vendas
+GROUP BY Produto, Categoria
+ORDER BY Total_Vendas DESC;
+"""
+df_resultado1 = pd.read_sql(query1, conn)
+print("\n=== Consulta 1: Faturamento por Produto/Categoria ===")
+print(df_resultado1.to_string(index=False))
+
+# 4) Consulta 2: menor volume em junho/2023 (SQLite)
+query2 = """
+SELECT
+    Produto,
+    SUM(Quantidade) AS Total_Quantidade
+FROM vendas
+WHERE strftime('%Y-%m', Data) = '2023-06'
+GROUP BY Produto
+ORDER BY Total_Quantidade ASC;
+"""
+df_resultado2 = pd.read_sql(query2, conn)
+print("\n=== Consulta 2: Menor volume em Junho/2023 ===")
+print(df_resultado2.to_string(index=False))
+
 conn.close()
-
-print("Pronto! A tabela 'vendas' foi criada e está pronta para ser consultada.")
-
-import sqlite3
-import pandas as pd
-
-# 1. Conecta ao banco de dados que você criou
-conn = sqlite3.connect('meu_banco.db')
-
-# 2. Define a sua consulta (a mesma que você escreveu)
-query = """
-SELECT
-    Produto,
-    Categoria,
-    SUM(Quantidade * Preco) AS Total_Vendas
-FROM vendas
-GROUP BY Produto, Categoria
-ORDER BY Total_Vendas DESC;
-"""
-
-# 3. Lê o resultado diretamente para um DataFrame
-df_resultado = pd.read_sql(query, conn)
-
-# 4. Exibe a tabela
-display(df_resultado)
-
-import sqlite3
-import pandas as pd
-
-# 1. Conecta ao banco de dados
-conn = sqlite3.connect('meu_banco.db')
-
-# 2. Define a consulta para Junho de 2023
-# (Mudamos para 2023 porque seu gráfico oficial é desse ano)
-query_junho = """
-SELECT
-    Produto,
-    SUM(Quantidade) AS Total_Quantidade
-FROM vendas
-WHERE Data LIKE '2023-06%'
-GROUP BY Produto
-ORDER BY Total_Quantidade ASC;
-"""
-
-# 3. Executa e transforma em tabela
-df_junho = pd.read_sql(query_junho, conn)
-
-# 4. Mostra o resultado
-print("Produtos que menos venderam em Junho/2023:")
-display(df_junho)
-
-**Lógica da Consulta 1 (Ranking de Faturamento)**
-
-Nesta consulta, o desafio era transformar milhares de linhas em apenas 5 linhas (uma para cada produto).
-SUM(Quantidade * Preco): O SQL é inteligente. Ele faz o cálculo linha por linha (Multiplica Qtd x Preço) e, simultaneamente, vai somando esses resultados dentro de cada "caixa" que o GROUP BY criou.
-
-O papel do GROUP BY: Se você não usasse esse comando, o SQL tentaria somar tudo em um único valor gigante. Ao dizer GROUP BY Produto, você está dizendo: "Quero uma soma separada para cada nome diferente que encontrar na coluna Produto".
-
-**Lógica da Consulta 2 (Filtro de Data e Baixas Vendas)**
-
-Aqui o foco foi a precisão do filtro.
-LIKE '2023-06%': Como as datas no banco de dados costumam ser completas (Ano-Mês-Dia Hora:Minuto:Segundo), o símbolo % funciona como um "coringa". Ele diz ao SQL: "Não me importa o dia, se começar com 2023-06, coloque no relatório".
-
-ORDER BY ... ASC: A lógica aqui é de exclusão. Ao ordenar de forma ascendente, o SQL coloca o que teve "menos sucesso" no topo. Isso é fundamental para a gestão de estoque, pois mostra o que está ficando parado na prateleira.
-
-# Conteúdo que será gravado no arquivo .sql
-conteudo_sql = """
--- ============================================================
--- ARQUIVO: consultas_sql.sql
--- DESCRIÇÃO: Consultas de análise de faturamento e volume de vendas
--- ============================================================
-
--- EXPLICAÇÃO DA LÓGICA:
--- O processo seguiu a estrutura fundamental da linguagem SQL:
--- 1. Filtragem (WHERE): Para a análise mensal, isolamos os dados
---    através do operador LIKE, que permite selecionar um padrão
---    específico de data (Ano-Mês).
--- 2. Agrupamento (GROUP BY): Para consolidar dados de diversas
---    vendas em uma única linha por produto, agrupamos as
---    informações pela coluna 'Produto'.
--- 3. Agregação (SUM): Realizamos o cálculo matemático de faturamento
---    (Quantidade * Preço) e de volume (Quantidade) dentro de cada grupo.
--- 4. Ordenação (ORDER BY): Organizamos os resultados para facilitar
---    a leitura (DESC para os maiores valores e ASC para os menores).
-
--- ------------------------------------------------------------
--- CONSULTA 1: Nome do produto, categoria e soma total de vendas
--- Objetivo: Ranking de faturamento em ordem decrescente.
--- ------------------------------------------------------------
-SELECT
-    Produto,
-    Categoria,
-    SUM(Quantidade * Preco) AS Total_Vendas
-FROM vendas
-GROUP BY Produto, Categoria
-ORDER BY Total_Vendas DESC;
-
--- ------------------------------------------------------------
--- CONSULTA 2: Produtos que venderam menos no mês de junho/2023
--- Objetivo: Identificar itens com menor performance de saída.
--- ------------------------------------------------------------
-SELECT
-    Produto,
-    SUM(Quantidade) AS Total_Quantidade
-FROM vendas
-WHERE Data LIKE '2023-06%'
-GROUP BY Produto
-ORDER BY Total_Quantidade ASC;
-"""
-
-# Criando o arquivo no ambiente do Colab
-with open("consultas_sql.sql", "w", encoding='utf-8') as f:
-    f.write(conteudo_sql)
-
-print("Arquivo 'consultas_sql.sql' gerado com sucesso!")
-from google.colab import files
-files.download('consultas_sql.sql')
