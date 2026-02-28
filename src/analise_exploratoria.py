@@ -21,7 +21,7 @@ vendas_mensais = df.groupby('MesAno')['Total_Venda'].sum().reset_index()
 # Vamos ver a nova tabela resumida:
 print(vendas_mensais)
 
-# 1. Ajuste técnico: convertemos o 'MesAno' para texto (string) 
+# 1. Ajuste técnico: convertemos o 'MesAno' para texto (string)
 # 1. Criamos um dicionário "traduzindo" o formato numérico para os nomes em português
 meses_ptbr = {
     '2023-01': 'Janeiro', '2023-02': 'Fevereiro', '2023-03': 'Março',
@@ -33,14 +33,14 @@ meses_ptbr = {
 # 2. Usamos a função .replace() para substituir os valores na nossa tabela
 vendas_mensais['MesAno'] = vendas_mensais['MesAno'].replace(meses_ptbr)
 
-# Vamos dar um 'print' para confirmar que mudou:
+# Vamos confirmar que mudou:
 print(vendas_mensais)
 
 # 2. Cria a "tela" do nosso gráfico e define o tamanho (10 de largura por 5 de altura)
 plt.figure(figsize=(10, 5))
 
-# 3. Desenha a linha! 
-# Passamos quem é o eixo X (Meses) e quem é o eixo Y (Total). 
+# 3. Desenha a linha!
+# Passamos quem é o eixo X (Meses) e quem é o eixo Y (Total).
 # O "marker='o'" coloca uma bolinha marcando cada mês para ficar mais fácil de ler.
 plt.plot(vendas_mensais['MesAno'], vendas_mensais['Total_Venda'], marker='o', color='blue', linewidth=2)
 
@@ -74,8 +74,8 @@ df['MesAno'] = df['Data'].dt.to_period('M').astype(str)
 
 # Dicionário para traduzir os meses (como fizemos antes)
 meses_ptbr = {
-    '2023-01': 'Jan', '2023-02': 'Fev', '2023-03': 'Mar', '2023-04': 'Abr', 
-    '2023-05': 'Mai', '2023-06': 'Jun', '2023-07': 'Jul', '2023-08': 'Ago', 
+    '2023-01': 'Jan', '2023-02': 'Fev', '2023-03': 'Mar', '2023-04': 'Abr',
+    '2023-05': 'Mai', '2023-06': 'Jun', '2023-07': 'Jul', '2023-08': 'Ago',
     '2023-09': 'Set', '2023-10': 'Out', '2023-11': 'Nov', '2023-12': 'Dez'
 }
 df['MesAno'] = df['MesAno'].replace(meses_ptbr)
