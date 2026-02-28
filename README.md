@@ -213,3 +213,23 @@ src/execucao_SQL.py
 Esse script cria a tabela `vendas` a partir do arquivo `data_clean.csv` e executa as queries para conferência dos resultados.
 
 ---
+
+
+## Parte 4 — Relatório Final
+
+O relatório consolidando os principais insights e recomendações estratégicas, conforme solicitado no enunciado (máximo de 300 palavras), foi desenvolvido em R Markdown.
+
+Arquivos disponíveis em:
+
+```
+Relatório/relatorio_insights.Rmd
+Relatório/relatorio_insights.pdf
+```
+
+O documento apresenta:
+
+* Síntese dos principais padrões identificados nas análises exploratórias
+* Discussão sobre concentração de receita e volatilidade
+* Sugestões de ações estratégicas baseadas nos achados
+
+---
