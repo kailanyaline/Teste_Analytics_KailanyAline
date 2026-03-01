@@ -1,4 +1,4 @@
-# Teste Analytics Kailany Aline
+# Teste para Estagiário de Analytics - Kailany Aline
 
 ## Parte 1 — Limpeza e Análise de Dados de Vendas
 
@@ -233,3 +233,4 @@ O documento apresenta:
 * Sugestões de ações estratégicas baseadas nos achados
 
 ---
+Contato: www.linkedin.com/in/kailanyaline
