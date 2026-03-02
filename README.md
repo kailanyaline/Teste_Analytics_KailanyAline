@@ -207,7 +207,7 @@ Conceitos aplicados:
 As consultas foram validadas utilizando **SQLite via Python**, por meio do arquivo:
 
 ```
-src/execução_sql.py
+src/execução_sql
 ```
 
 Esse script cria a tabela `vendas` a partir do arquivo `data_clean.csv` e executa as queries para conferência dos resultados.
