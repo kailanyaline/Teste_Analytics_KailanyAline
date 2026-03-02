@@ -1,6 +1,6 @@
 -- ============================================================
 -- ARQUIVO: consultas_sql.sql
--- DESCRIÇÃO: Consultas SQL + explicação da lógica (Parte 2)
+-- DESCRIÇÃO: Consultas SQL + explicação da lógica
 -- TABELA: vendas
 --
 -- Observação:
